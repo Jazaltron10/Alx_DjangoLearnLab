@@ -1,5 +1,3 @@
-Certainly, Your Grace. Here's the difference in simple terms:
-
 ### `python manage.py makemigrations bookshelf`
 
 This command tells Django to create migration files specifically for the `bookshelf` app. Migrations are like "blueprints" for database changes. By running this command, you're instructing Django to only look at changes in the `bookshelf` app and generate migration files for it.
