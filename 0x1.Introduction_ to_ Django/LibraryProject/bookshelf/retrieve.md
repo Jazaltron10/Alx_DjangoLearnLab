@@ -5,6 +5,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 (InteractiveConsole)
 >>> from bookshelf.models import Book
 >>> # Retrieve command
+>>> book = Book.objects.get(title="1984")
+... 
+1984 George Orwell 1949
 >>> all_books = Book.objects.all()
 >>> for book in all_books:
 ...     print(book.title, book.author, book.publication_year)
