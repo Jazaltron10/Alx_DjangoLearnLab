@@ -29,6 +29,11 @@ class Register(CreateView):
     template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
 
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(self.request.POST or None)  # Explicitly using UserCreationForm()
+
 # Use Django's built-in LoginView
 class LoginView(LoginView):
     template_name = 'relationship_app/login.html'
@@ -37,5 +42,3 @@ class LoginView(LoginView):
 # Use Django's built-in LogoutView
 class LogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
-
-
