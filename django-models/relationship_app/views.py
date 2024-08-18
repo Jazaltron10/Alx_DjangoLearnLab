@@ -24,18 +24,18 @@ class LibraryDetailView(DetailView):
         return context
 
 # User registration view
-class UserRegisterView(CreateView):
+class Register(CreateView):
     form_class = UserCreationForm
     template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
 
 # Use Django's built-in LoginView
-class UserLoginView(LoginView):
+class LoginView(LoginView):
     template_name = 'relationship_app/login.html'
     authentication_form = AuthenticationForm
 
 # Use Django's built-in LogoutView
-class UserLogoutView(LogoutView):
+class LogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
 
 
