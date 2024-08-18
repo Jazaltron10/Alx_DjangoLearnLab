@@ -1,7 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import DetailView
 from .models import Book, Library  # Import the Book model
-
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required  # Import login_required to restrict access to authenticated users only
 # Define the function-based view to list all books
 def list_books(request):
     # Query all books from the database
@@ -22,3 +28,27 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['books'] = self.object.books.all()  # Get all books related to the library
         return context
+
+# User registration view
+class UserRegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'relationship_app/register.html'
+    success_url = reverse_lazy('login')
+
+# Use Django's built-in LoginView
+class UserLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
+    authentication_form = AuthenticationForm
+
+# Use Django's built-in LogoutView
+class UserLogoutView(LogoutView):
+    template_name = 'relationship_app/logout.html'
+
+@login_required # Decorator to ensure that only logged-in users can access this view
+def profile_view(request):
+    """
+    View to display the user's profile after login.
+    This view is only accessible to logged-in users, enforced by the @login_required decorator.
+    Renders a template that shows a welcome message to the user and provides a logout button.
+    """
+    return render(request, 'relationship_app/profile.html', {'user': request.user})  # Pass the current user to the template and render it
