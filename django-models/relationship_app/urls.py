@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import list_books, LibraryDetailView, register, LoginView, LogoutView
+from .views import list_books, LibraryDetailView, LoginView,LogoutView
+from . import views
 
 urlpatterns = [
     # Route for the function-based view to list all books
@@ -9,7 +10,7 @@ urlpatterns = [
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
     
     # Routes for user authentication
-    path('register/', register.as_view(), name='register'),  # User registration view
+    path('register/', views.register.as_view(), name='register'),  # User registration view
     
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # User login view with template
     
