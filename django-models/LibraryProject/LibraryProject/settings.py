@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -38,6 +39,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Add the path to the relationship_app
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '..', 'relationship_app'))
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf.apps.BookshelfConfig',
-    'relationship_app.apps.RelationshipAppConfig',
+    'relationship_app',
 ]
 
 MIDDLEWARE = [
