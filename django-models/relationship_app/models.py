@@ -40,6 +40,7 @@ class Author(models.Model):
 class Book(models.Model):
     # The title of the book, stored as a character field with a maximum length of 200 characters.
     title = models.CharField(max_length=200)
+    isbn = models.CharField(max_length=13, unique=True, blank=True, null=True)  # Default ISBN, usually it's a placeholder   
     
     # ForeignKey establishes a many-to-one relationship with the Author model.
     # Each book is linked to one author, but an author can write many books.
@@ -49,6 +50,13 @@ class Book(models.Model):
         Author, on_delete=models.CASCADE, 
         related_name='books'
     )
+    
+    class Meta:
+        permissions = [
+         ("can_add_book","Can add book"),   
+         ("can_change_book","Can change book"),   
+         ("can_delete_book","Can delete book"),   
+        ]
     
     # String representation of the Book object to return the book's title and author for easy identification.
     def __str__(self) -> str:
