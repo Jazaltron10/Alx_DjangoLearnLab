@@ -24,6 +24,29 @@ urlpatterns = [
     path('librarian-dashboard/', views.librarian_view, name='librarian_view'),
     path('member-dashboard/', views.member_view, name='member_view'),
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 
 from django.contrib.auth.models import User

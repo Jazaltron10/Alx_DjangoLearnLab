@@ -4,11 +4,16 @@ from . import views
 
 urlpatterns = [
     # Route for the function-based view to list all books
-    path('books/', list_books, name='list_books'),
-    path('books/add/', views.add_book, name='add_book'),
-    path('books/<int:pk>/edit/', views.edit_book, name='edit_book'),
-    path('books/<int:pk>/delete/', views.delete_book, name='delete_book'),
-    
+
+    # List all books
+    path('books/', views.list_books, name='list_books'),
+    # Add a new book
+    path('add_book/', views.add_book, name='add_book'),
+    # Edit an existing book by its primary key (book_id)
+    path('edit_book/<int:book_id>/', views.edit_book, name='edit_book'),
+    # Delete an existing book by its primary key (book_id)
+    path('delete_book/<int:book_id>/', views.delete_book, name='delete_book'),
+       
     # Route for the class-based view to display library details
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
     
