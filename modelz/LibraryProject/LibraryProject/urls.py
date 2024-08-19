@@ -16,8 +16,38 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+# LibraryProject/urls.py
+from django.views.generic.base import RedirectView
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/login/', permanent=False), name='home'),
     path('', include('relationship_app.urls')),  # Include the URLs from relationship_app
 ]
+
+
+"""
+from django.contrib.auth.models import User
+from relationship_app.models import UserProfile
+
+# Create an admin user
+admin_user = User.objects.create_user(username='adminuser', password='adminpassword')
+UserProfile.objects.create(user=admin_user, role='Admin')
+
+# Create a librarian user
+librarian_user = User.objects.create_user(username='librarianuser', password='librarianpassword')
+UserProfile.objects.create(user=librarian_user, role='Librarian')
+
+# Create a member user
+member_user = User.objects.create_user(username='memberuser', password='memberpassword')
+UserProfile.objects.create(user=member_user, role='Member')
+
+# Verify the roles
+print("Admin User:", admin_user.username, admin_user.userprofile.role)
+print("Librarian User:", librarian_user.username, librarian_user.userprofile.role)
+print("Member User:", member_user.username, member_user.userprofile.role)
+
+"""

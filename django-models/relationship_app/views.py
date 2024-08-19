@@ -7,6 +7,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required  # Import login_required to restrict access to authenticated users only
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseForbidden
 
 def list_books(request):
     books = Book.objects.all()
@@ -42,3 +45,27 @@ class LoginView(LoginView):
 # Use Django's built-in LogoutView
 class LogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
+
+
+
+# Helper function to check if the user has a specific role
+def check_role(user, role):
+    return user.is_authenticated and user.userprofile.role == role
+
+# Admin view
+@login_required
+@user_passes_test(lambda user: user.userprofile.role == 'Admin', login_url='home')
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+# Librarian view
+@login_required
+@user_passes_test(lambda user: user.userprofile.role == 'Librarian', login_url='home')
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+# Member view
+@login_required
+@user_passes_test(lambda user: user.userprofile.role == 'Member', login_url='home')
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
