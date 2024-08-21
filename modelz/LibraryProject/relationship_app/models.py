@@ -47,10 +47,12 @@ class Book(models.Model):
     # publication_date = models.DateField(default=date.today)  # Default to today's date
     # number_of_pages = models.IntegerField(default=0)  # Default to 0 pages
     
-    # ForeignKey establishes a many-to-one relationship with the Author model.
-    # Each book is linked to one author, but an author can write many books.
-    # The on_delete=models.CASCADE option means that if an author is deleted, all their books will also be deleted.
-    # The related_name='books' allows us to access all books written by an author using author.books.all().
+    """
+    ForeignKey establishes a many-to-one relationship with the Author model.
+    Each book is linked to one author, but an author can write many books.
+    The on_delete=models.CASCADE option means that if an author is deleted, all their books will also be deleted.
+    The related_name='books' allows us to access all books written by an author using author.books.all().
+    """
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, 
         related_name='books'
@@ -72,9 +74,11 @@ class Library(models.Model):
     # The name of the library, stored as a character field with a maximum length of 200 characters.
     name = models.CharField(max_length=200)
     
-    # ManyToManyField establishes a many-to-many relationship with the Book model.
-    # A library can have many books, and a book can be present in many libraries.
-    # The related_name='libraries' allows us to access all libraries that contain a particular book using book.libraries.all().
+    """
+    ManyToManyField establishes a many-to-many relationship with the Book model.
+    A library can have many books, and a book can be present in many libraries.
+    The related_name='libraries' allows us to access all libraries that contain a particular book using book.libraries.all().
+    """
     books = models.ManyToManyField(
         Book, related_name='libraries'
     )
@@ -88,9 +92,11 @@ class Librarian(models.Model):
     # The name of the librarian, stored as a character field with a maximum length of 100 characters.
     name = models.CharField(max_length=100)
     
-    # OneToOneField establishes a one-to-one relationship with the Library model.
-    # Each librarian is associated with one library, and each library has one librarian.
-    # The on_delete=models.CASCADE option means that if a library is deleted, the associated librarian is also deleted.
+    """
+    OneToOneField establishes a one-to-one relationship with the Library model.
+    Each librarian is associated with one library, and each library has one librarian.
+    The on_delete=models.CASCADE option means that if a library is deleted, the associated librarian is also deleted.
+    """
     library = models.OneToOneField(
         Library, on_delete=models.CASCADE
     )

@@ -21,11 +21,10 @@ from django.views.generic.base import RedirectView
 
 
 
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/login/', permanent=False), name='home'),
     path('', include('relationship_app.urls')),  # Include the URLs from relationship_app
+    path('admin/', admin.site.urls),
 ]
 
 
