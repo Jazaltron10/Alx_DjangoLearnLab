@@ -79,7 +79,6 @@ def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
 
-
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
