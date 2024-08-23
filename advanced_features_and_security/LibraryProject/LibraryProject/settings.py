@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rn)a9k5=k^rb=zgbvbt5**ra(p42w(ta-@fyf8^3ob6h+38%s*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -52,7 +52,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
+
+# Content Security Policies
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://trustedscripts.example.com")
+CSP_IMG_SRC = ("'self'", "https://trustedimages.example.com")
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -132,3 +138,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Security Configuration
+# Prevent some types of XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the site from being framed, protecting against clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent the browser from guessing the content type, which can prevent some XSS attacks
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Securing Cookies 
+# Ensure CSRF cookie is only sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# Ensure session cookie is only sent over HTTPS
+SESSION_COOKIE_SECURE = True

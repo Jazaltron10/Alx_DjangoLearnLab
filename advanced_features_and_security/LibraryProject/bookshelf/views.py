@@ -53,7 +53,7 @@ def book_list(request):
 
 # View to add a new book (requires create permission)
 @login_required
-@permission_required('bookshelf.can_create', raise_exception=True)
+@permission_required('bookshelf.can_create_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -68,7 +68,7 @@ def add_book(request):
 
 # View to edit a book (requires edit permission)
 @login_required
-@permission_required('bookshelf.can_edit', raise_exception=True)
+@permission_required('bookshelf.can_edit_book', raise_exception=True)
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
@@ -82,7 +82,7 @@ def edit_book(request, book_id):
 
 # View to delete a book (requires delete permission)
 @login_required
-@permission_required('bookshelf.can_delete', raise_exception=True)
+@permission_required('bookshelf.can_delete_book', raise_exception=True)
 def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
