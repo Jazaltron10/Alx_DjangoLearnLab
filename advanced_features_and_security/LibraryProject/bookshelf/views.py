@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from .models import Author, Book
 from django.contrib import messages
-from .models import Author, Book, CustomUser
-from django.contrib.auth.decorators import permission_required, login_required
+from .forms import ExampleForm
 
 # Registration view
 def register(request):
@@ -91,4 +93,14 @@ def delete_book(request, book_id):
         return redirect('book_list')
     return render(request, 'bookshelf/delete_book.html', {'book': book})    
     
-    
+
+# View to demonstrate form handling and validation
+def example_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the book to the database
+            return redirect('book_list')
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
