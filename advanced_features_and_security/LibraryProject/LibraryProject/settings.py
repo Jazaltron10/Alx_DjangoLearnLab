@@ -139,19 +139,41 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Security Configuration
-# Prevent some types of XSS attacks
-SECURE_BROWSER_XSS_FILTER = True
 
-# Prevent the site from being framed, protecting against clickjacking
+"""
+ Security Configuration Section 
+"""
+# Prevent your site from being framed by other sites (protect against clickjacking)
 X_FRAME_OPTIONS = 'DENY'
 
-# Prevent the browser from guessing the content type, which can prevent some XSS attacks
+# Prevent browsers from MIME-sniffing a response away from the declared content-type
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Securing Cookies 
+# Enable the browser’s XSS filtering and help prevent cross-site scripting attacks
+SECURE_BROWSER_XSS_FILTER = True
+
+
+"""
+ Securing Cookies 
+"""
 # Ensure CSRF cookie is only sent over HTTPS
 CSRF_COOKIE_SECURE = True
 
 # Ensure session cookie is only sent over HTTPS
 SESSION_COOKIE_SECURE = True
+
+
+""" 
+Task 3: HTTPS Support
+"""
+# Redirect all non-HTTPS requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Instruct browsers to only access the site via HTTPS for the next year (31,536,000 seconds)
+SECURE_HSTS_SECONDS = 31536000
+
+# Include all subdomains in the HTTPS policy
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Allow the site to be preloaded in HSTS (HTTP Strict Transport Security) lists
+SECURE_HSTS_PRELOAD = True
