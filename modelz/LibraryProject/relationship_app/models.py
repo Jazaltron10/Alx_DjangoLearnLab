@@ -60,9 +60,9 @@ class Book(models.Model):
     
     class Meta:
         permissions = [
-         ("can_add_book","Can add book"),   
-         ("can_change_book","Can change book"),   
-         ("can_delete_book","Can delete book"),   
+        ("can_add_book","Can add book"),   
+        ("can_change_book","Can change book"),   
+        ("can_delete_book","Can delete book"),   
         ]
     
     # String representation of the Book object to return the book's title and author for easy identification.
