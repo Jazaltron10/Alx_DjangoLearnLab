@@ -21,3 +21,9 @@ flush:
 
 super:
 	python manage.py createsuperuser 
+
+pipu:
+	pip install --upgrade pip
+
+depnd:
+	pip install django mysqlclient python-dotenv djangorestframework djangorestframework-simplejwt
