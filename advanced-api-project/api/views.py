@@ -1,6 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import generics, viewsets
 from .models import Author, Book
-from .serializers import AuthorSerializer, BookSerializer
+from .seriealizers import AuthorSerializer, BookSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+from rest_framework.authentication import TokenAuthentication
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all().prefetch_related('books')
@@ -23,3 +26,34 @@ class BookViewSet(viewsets.ModelViewSet):
         if author_name is not None:
             queryset = queryset.filter(author__name__icontains(author_name)) # type: ignore
         return queryset
+
+
+
+class BookListAPIView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+class BookCreateAPIView(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    
+
+class BookDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+class BookUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    
+class BookDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
