@@ -29,30 +29,30 @@ class BookViewSet(viewsets.ModelViewSet):
 
 
 
-class BookListAPIView(generics.ListAPIView):
+class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     
-class BookCreateAPIView(generics.CreateAPIView):
+class CreateView(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     
 
-class BookDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class DetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     
-class BookUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
+class UpdateView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     
-class BookDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+class DeleteView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
