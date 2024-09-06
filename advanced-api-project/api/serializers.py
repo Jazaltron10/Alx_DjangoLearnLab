@@ -8,11 +8,12 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book  # Specify the model to serialize
         fields = ['title', 'publication_year', 'author', 'owner']  # Specify the fields to include in the serialization
         
-    def validate(self, value):
+    def validate(self, data):
         # Validation method to ensure the publication year is not in the future
-        if value > datetime.date.today().year:
+        publication_year = data.get('publication_year')
+        if publication_year and publication_year > datetime.date.today().year:
             raise serializers.ValidationError("Publication year cannot be in the future.")
-        return value  # Return the validated value
+        return data  # Return the validated value
 
 # Serializer for the Author model
 class AuthorSerializer(serializers.ModelSerializer):

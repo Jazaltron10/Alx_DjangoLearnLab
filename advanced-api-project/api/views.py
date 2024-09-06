@@ -36,7 +36,7 @@ class BookViewSet(viewsets.ModelViewSet):
         # Check if 'author' is provided in query params to filter books by author's name (case-insensitive)
         author_name = self.request.query_params.get('author', None)
         if author_name is not None:
-            queryset = queryset.filter(author__name__icontains(author_name) ) # type: ignore
+            queryset = queryset.filter(author__name__icontains=author_name)
         return queryset
 
 

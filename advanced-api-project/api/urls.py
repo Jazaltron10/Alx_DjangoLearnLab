@@ -18,7 +18,3 @@ urlpatterns = [
     path('books/delete/<int:pk>/', DeleteView.as_view(), name='book-delete'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'), # Token authentication endpoint
 ]
-
-
-
-
