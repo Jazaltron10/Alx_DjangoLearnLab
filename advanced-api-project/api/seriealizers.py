@@ -6,7 +6,7 @@ from .models import Author, Book  # Importing the Author and Book models from th
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book  # Specify the model to serialize
-        fields = ['title', 'publication_year', 'author']  # Specify the fields to include in the serialization
+        fields = ['title', 'publication_year', 'author', 'owner']  # Specify the fields to include in the serialization
         
     def validate(self, value):
         # Validation method to ensure the publication year is not in the future

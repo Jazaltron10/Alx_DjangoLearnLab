@@ -76,3 +76,29 @@ for book_data in books_data:
     else:
         print(f"Book '{book.title}' already exists.")
 
+
+from django.contrib.auth.models import User
+
+# Define dummy data for Users
+users_data = [
+    {"username": "john_smith", "email": "john@example.com", "password": "password123", "first_name": "John", "last_name": "Smith"},
+    {"username": "jane_smith", "email": "jane@example.com", "password": "password123", "first_name": "Jane", "last_name": "Smith"},
+    {"username": "admin_user", "email": "admin@example.com", "password": "adminpassword", "first_name": "Admin", "last_name": "User"},
+]
+
+# Create Users
+for user_data in users_data:
+    user, created = User.objects.get_or_create(
+        username=user_data["username"],
+        defaults={
+            "email": user_data["email"],
+            "first_name": user_data["first_name"],
+            "last_name": user_data["last_name"],
+        }
+    )
+    if created:
+        user.set_password(user_data["password"])
+        user.save()
+
+print("Database populated successfully!")
+
