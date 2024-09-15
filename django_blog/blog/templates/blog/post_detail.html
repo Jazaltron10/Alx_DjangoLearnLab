@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+
+{% block content %} 
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p>Written by: {{ post.author }}</p>
+    <p>Published on: {{ post.published_date }}</p>
+    
+    {% if user == post.author %}
+        <a href="{% url 'post-update' post.id %}">Edit</a>
+        <a href="{% url 'post-delete' post.id %}">Delete</a>
+    {% endif %}
+{% endblock %}
