@@ -26,3 +26,9 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your comment'}),
         }
+    # Example validation for comment length
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if len(content) < 3:
+            raise forms.ValidationError("Comment is too short!")
+        return content
