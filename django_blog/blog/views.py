@@ -6,6 +6,8 @@ from django.utils.decorators import method_decorator
 from .forms import CustomUserCreationForm, UserUpdateForm, CommentForm
 from django.urls import reverse, reverse_lazy
 from .models import Comment, Post
+from django.db.models import Q
+from taggit.models import Tag
 
 # User-related views
 def register(request):
@@ -137,3 +139,29 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author  # Only the author can delete
+
+
+# Tagging and Search Functionality
+class PostSearchView(DjangoListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return Post.objects.none()
+
+class PostListByTagView(DjangoListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
+        return Post.objects.filter(tags__in=[tag])

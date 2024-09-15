@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Comment
+from taggit.forms import TagField
+from .models import Comment, Post
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField()
@@ -32,3 +33,10 @@ class CommentForm(forms.ModelForm):
         if len(content) < 3:
             raise forms.ValidationError("Comment is too short!")
         return content
+    
+class PostForm(forms.ModelForm):
+    tags = TagField()  # Add tags field
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']  # Include tags in the form
