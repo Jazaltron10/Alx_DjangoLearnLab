@@ -26,7 +26,7 @@ pipu:
 	pip install --upgrade pip
 
 depnd:
-	pip install django mysqlclient python-dotenv djangorestframework djangorestframework-simplejwt django-filter
+	pip install django mysqlclient python-dotenv djangorestframework djangorestframework-simplejwt django-filter black django-taggit
 	
 format:
 	black $(dir)
