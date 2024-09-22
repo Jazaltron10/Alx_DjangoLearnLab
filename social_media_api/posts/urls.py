@@ -13,5 +13,3 @@ urlpatterns = [
     path('', include(router.urls)),
     path('feed/', UserFeedView.as_view(), name='user_feed'),
 ]
-
-

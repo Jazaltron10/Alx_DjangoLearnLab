@@ -77,11 +77,12 @@ class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users can unfollow others
 
     def post(self, request, user_id):
-        # Get the user the current user wants to unfollow using CustomUser.objects.all()
-        user_to_unfollow = get_object_or_404(User.objects.all(), id=user_id)
+        try:
+            # Get the user the current user wants to unfollow using CustomUser.objects.all()
+            user_to_unfollow = get_object_or_404(User.objects.all(), id=user_id)
 
-        # Remove the user from the current user's 'following' list
-        request.user.following.remove(user_to_unfollow)
-
-        # Return a success message
-        return Response({'message': f'You have unfollowed {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
+            # Remove the user from the current user's 'following' list
+            request.user.following.remove(user_to_unfollow)
+        except User.DoesNotExist:
+            # Return a success message
+            return Response({'message': f'You have unfollowed {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
