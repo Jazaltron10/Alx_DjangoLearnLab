@@ -7,10 +7,10 @@ from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, UserSerializer
 
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from django.contrib.auth import get_user_model
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 
 # Importing the CustomUser model
 User = get_user_model()
@@ -53,31 +53,35 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     def get(self, request, *args, **kwargs):
         return Response({"message": "Profile page is here"}, status=200)
 
+# Follow User View using GenericAPIView
+class FollowUserView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can follow others
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def follow_user(request, user_id):
-    # Fetch the user that the current user wants to follow
-    user_to_follow = get_object_or_404(User, id=user_id)
-    
-    # Prevent following yourself
-    if request.user == user_to_follow:
-        return JsonResponse({'error': 'You cannot follow yourself'}, status=400)
-    
-    # Add the user to the current user's 'following' list
-    request.user.following.add(user_to_follow)
-    
-    # Return a success message
-    return JsonResponse({'message': f'You are now following {user_to_follow.username}'})
+    def post(self, request, user_id):
+        # Get the user the current user wants to follow using CustomUser.objects.all()
+        user_to_follow = get_object_or_404(User.objects.all(), id=user_id)
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def unfollow_user(request, user_id):
-    # Fetch the user that the current user wants to unfollow
-    user_to_unfollow = get_object_or_404(User, id=user_id)
-    
-    # Remove the user from the current user's 'following' list
-    request.user.following.remove(user_to_unfollow)
-    
-    # Return a success message
-    return JsonResponse({'message': f'You have unfollowed {user_to_unfollow.username}'})
+        # Prevent following yourself
+        if request.user == user_to_follow:
+            return Response({'error': 'You cannot follow yourself'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Add the user to the current user's 'following' list
+        request.user.following.add(user_to_follow)
+
+        # Return a success message
+        return Response({'message': f'You are now following {user_to_follow.username}'}, status=status.HTTP_200_OK)
+
+
+# Unfollow User View using GenericAPIView
+class UnfollowUserView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can unfollow others
+
+    def post(self, request, user_id):
+        # Get the user the current user wants to unfollow using CustomUser.objects.all()
+        user_to_unfollow = get_object_or_404(User.objects.all(), id=user_id)
+
+        # Remove the user from the current user's 'following' list
+        request.user.following.remove(user_to_unfollow)
+
+        # Return a success message
+        return Response({'message': f'You have unfollowed {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
