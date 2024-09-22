@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.conf import settings
 
 # Post model: Represents a social media post
@@ -24,3 +25,23 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
+
+# Get the user model
+User = get_user_model()
+
+class Like(models.Model):
+    # ForeignKey to the User who liked the post
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    # ForeignKey to the liked Post
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    
+    # Timestamp for when the like was created
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Ensure a user can like a post only once
+        unique_together = ('user', 'post')
+
+    def __str__(self):
+        return f'{self.user.username} likes {self.post.title}'
