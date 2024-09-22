@@ -5,12 +5,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 
-from django.shortcuts import render
-from rest_framework.decorators import api_view, permission_classes
+
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Post  # Assuming Post model is already defined in your posts app
 from django.contrib.auth import get_user_model
+from .models import Post
+from .serializers import PostSerializer
+
+# Importing the CustomUser model
+User = get_user_model()
 
 # Custom pagination class
 class PostPagination(PageNumberPagination):
@@ -28,7 +32,6 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)  # Set the author to the current user when creating a post
 
-
 # Viewset for Comment: Handles all CRUD operations
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()  # Fetch all comments
@@ -37,22 +40,21 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)  # Set the author to the current user when creating a comment
+        
 
-User = get_user_model()
+# View to generate a feed based on the users the current user follows
+class UserFeedView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access the feed
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def user_feed(request):
-    # Get the users that the current user follows
-    followed_users = request.user.following.all()
+    def get(self, request, *args, **kwargs):
+        # Get the users the current user is following
+        following_users = request.user.following.all()
 
-    # Get posts made by followed users, ordered by creation date (most recent first)
-    posts = Post.objects.filter(user__in=followed_users).order_by('-created_at')
+        # Filter posts by the authors the current user follows and order them by creation date (newest first)
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
 
-    # Serialize the posts (assuming a PostSerializer is already defined)
-    serializer = PostSerializer(posts, many=True)
+        # Serialize the posts to return them as JSON
+        serializer = PostSerializer(posts, many=True)
 
-    # Return the serialized posts in the response
-    return Response(serializer.data)
-
-
+        # Return the serialized posts as the feed response
+        return Response(serializer.data, status=200)
