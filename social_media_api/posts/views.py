@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post, Comment
@@ -44,7 +45,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 # View to generate a feed based on the users the current user follows
 class UserFeedView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can access the feed
+    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access the feed
 
     def get(self, request, *args, **kwargs):
         # Get the users the current user is following
